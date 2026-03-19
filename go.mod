@@ -22,6 +22,7 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/shirou/gopsutil/v4 v4.26.2
 	github.com/starfederation/datastar-go v1.1.0
+	github.com/templui/templui v1.9.1
 )
 
 require (
@@ -30,6 +31,7 @@ require (
 	github.com/Ladicle/tabwriter v1.0.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
+	github.com/Oudwins/tailwind-merge-go v0.2.0 // indirect
 	github.com/ProtonMail/go-crypto v1.1.5 // indirect
 	github.com/a-h/parse v0.0.0-20250122154542-74294addb73e // indirect
 	github.com/air-verse/air v1.61.7 // indirect
@@ -59,7 +61,7 @@ require (
 	github.com/elliotchance/orderedmap/v3 v3.1.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-delve/delve v1.24.1 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
@@ -83,7 +85,7 @@ require (
 	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260216142805-b3301c5f2a88 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mattn/go-zglob v0.0.6 // indirect

@@ -6,10 +6,11 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
-	"northstar/web/resources"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"northstar/web/resources"
 )
 
 func main() {
@@ -23,13 +24,10 @@ func run() error {
 	files := map[string]string{
 		"https://raw.githubusercontent.com/starfederation/datastar/develop/bundles/datastar.js":     resources.StaticDirectoryPath + "/datastar/datastar.js",
 		"https://raw.githubusercontent.com/starfederation/datastar/develop/bundles/datastar.js.map": resources.StaticDirectoryPath + "/datastar/datastar.js.map",
-		"https://github.com/saadeghi/daisyui/releases/latest/download/daisyui.js":                   resources.StylesDirectoryPath + "/daisyui/daisyui.js",
-		"https://github.com/saadeghi/daisyui/releases/latest/download/daisyui-theme.js":             resources.StylesDirectoryPath + "/daisyui/daisyui-theme.js",
 	}
 
 	directories := []string{
 		resources.StaticDirectoryPath + "/datastar",
-		resources.StylesDirectoryPath + "/daisyui",
 	}
 
 	if err := removeDirectories(directories); err != nil {
@@ -80,7 +78,7 @@ func createDirectories(dirs []string) error {
 
 	for _, path := range dirs {
 		wg.Go(func() {
-			if err := os.MkdirAll(path, 0755); err != nil {
+			if err := os.MkdirAll(path, 0o755); err != nil {
 				errCh <- fmt.Errorf("failed to create static directory [%s]: %w", path, err)
 			}
 		})

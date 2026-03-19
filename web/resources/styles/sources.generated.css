@@ -1,0 +1,2 @@
+@source "./**/*.templ";
+@source "/home/db/go/pkg/mod/github.com/templui/templui@v1.9.1/components/**/*.templ";

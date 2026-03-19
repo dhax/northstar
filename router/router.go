@@ -22,12 +22,12 @@ import (
 )
 
 func SetupRoutes(ctx context.Context, router chi.Router, sessionStore *sessions.CookieStore, ns *embeddednats.Server) (err error) {
-
 	if config.Global.Environment == config.Dev {
 		setupReload(router)
 	}
 
 	router.Handle("/static/*", resources.Handler())
+	router.Handle("/templui/js/*", resources.TemplUIScriptRoutes())
 
 	if err := errors.Join(
 		indexFeature.SetupRoutes(router, sessionStore, ns),
@@ -48,7 +48,7 @@ func setupReload(router chi.Router) {
 
 	router.Get("/reload", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		reload := func() { sse.ExecuteScript("window.location.reload()") }
+		reload := func() { _ = sse.ExecuteScript("window.location.reload()") }
 		hotReloadOnce.Do(reload)
 		select {
 		case <-reloadChan:
@@ -63,7 +63,6 @@ func setupReload(router chi.Router) {
 		default:
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	})
-
 }

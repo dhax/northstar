@@ -2,6 +2,7 @@ package pages
 
 import (
 	"github.com/starfederation/datastar-go/datastar"
+	"github.com/templui/templui/components/button"
 	"northstar/features/common/components"
 	"northstar/features/common/layouts"
 )
@@ -13,18 +14,21 @@ type CounterSignals struct {
 
 templ CounterButtons() {
 	<div class="flex justify-around gap-4">
-		<button
-			class="btn btn-info"
-			data-on:click={ datastar.PostSSE("/counter/increment/global") }
-		>
+		@button.Button(button.Props{
+			Variant: button.VariantSecondary,
+			Attributes: templ.Attributes{
+				"data-on:click": datastar.PostSSE(("/counter/increment/global")),
+			},
+		}) {
 			Increment Global
-		</button>
-		<button
-			class="btn btn-success"
-			data-on:click={ datastar.PostSSE("/counter/increment/user") }
-		>
+		}
+		@button.Button(button.Props{
+			Attributes: templ.Attributes{
+				"data-on:click": datastar.PostSSE(("/counter/increment/user")),
+			},
+		}) {
 			Increment User
-		</button>
+		}
 	</div>
 }
 
@@ -45,7 +49,7 @@ templ Counter(signals CounterSignals) {
 	<div
 		id="container"
 		data-signals={ templ.JSONString(signals) }
-		class="flex flex-col gap-4"
+		class="h-screen flex flex-col gap-4 justify-center"
 	>
 		@CounterButtons()
 		@CounterCounts()

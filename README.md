@@ -6,7 +6,7 @@
 - [NATS](https://docs.nats.io/)
 - [Datastar](https://github.com/starfederation/datastar)
 - [Templ](https://templ.guide/)
-  - [Tailwind](https://tailwindcss.com/) x [DaisyUI](https://daisyui.com/)
+  - [Tailwind](https://tailwindcss.com/) x [templUI](https://templui.io/)
 
 # Setup
 
@@ -16,13 +16,13 @@
 git clone https://github.com/zangster300/northstar.git
 ```
 
-2. Install Dependencies
+1. Install Dependencies
 
 ```shell
 go mod tidy
 ```
 
-3. Create 🚀
+1. Create 🚀
 
 # Development
 
@@ -128,6 +128,6 @@ nats kv put todos [key] '{"todos":[{"text":"Hello, NATS!","completed":true}],"ed
 
 - [datastar](https://www.jsdelivr.com/package/gh/starfederation/datastar)
 - [tailwindcss](https://tailwindcss.com/)
-- [daisyui](https://daisyui.com/)
+- [templUI](https://templui.io/)
 - [esbuild](https://esbuild.github.io/)
 - [lit](https://lit.dev/)

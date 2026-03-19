@@ -7,17 +7,16 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"northstar/config"
-	"northstar/web/resources"
 	"os"
 	"os/signal"
+
+	"northstar/config"
+	"northstar/web/resources"
 
 	"github.com/evanw/esbuild/pkg/api"
 )
 
-var (
-	watch = false
-)
+var watch = false
 
 func main() {
 	flag.BoolVar(&watch, "watch", false, "Enable watcher mode")
@@ -48,10 +47,10 @@ func build(ctx context.Context) error {
 				uncomment the entrypoint below after running pnpm install in the resources.LibsDirectoryPath + /lit directory
 				esbuild will only be able to find the lit + sortable libraries after doing so
 			*/
-			// {
-			// 	InputPath:  resources.LibsDirectoryPath + "/lit/src/index.ts",
-			// 	OutputPath: "libs/sortable-example",
-			// },
+			{
+				InputPath:  resources.LibsDirectoryPath + "/lit/src/index.ts",
+				OutputPath: "libs/sortable-example",
+			},
 		},
 		Bundle:            true,
 		Format:            api.FormatESModule,

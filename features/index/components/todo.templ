@@ -3,6 +3,11 @@ package components
 import (
 	"fmt"
 	"github.com/starfederation/datastar-go/datastar"
+	"github.com/templui/templui/components/alert"
+	"github.com/templui/templui/components/button"
+	"github.com/templui/templui/components/icon"
+	"github.com/templui/templui/components/input"
+	"github.com/templui/templui/components/tooltip"
 	common "northstar/features/common/components"
 )
 
@@ -44,42 +49,51 @@ templ TodosMVCView(mvc *TodoMVC) {
 			input = mvc.Todos[mvc.EditingIdx].Text
 		}
 	}}
-	<div id="todos-container" class="h-full relative border border-solid border-primary rounded p-2 my-2 mx-28">
+	<div id="todos-container" class="h-full relative mx-28">
 		<div
-			class="flex flex-col w-full gap-4"
+			class="flex flex-col w-full py-4"
 			data-signals={ fmt.Sprintf("{input:'%s'}", input) }
 		>
-			<section class="flex flex-col gap-2">
-				<header class="flex flex-col gap-2">
-					<div class="alert alert-info">
-						@common.Icon("material-symbols:info")
-						<p>
-							<div class="text-sm">
-								This mini application is driven by a
-								<span class="italic font-bold uppercase text-primary">single get request!</span>
-								<br/>
-								As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open your dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
-							</div>
-						</p>
+			@alert.Alert(alert.Props{Variant: alert.VariantDestructive}) {
+				@icon.TriangleAlert()
+				@alert.Title() {
+					This mini application is driven by a <span class="italic font-bold uppercase text-primary">single get request!</span>
+				}
+				@alert.Description() {
+					<div class="text-sm">
+						As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open your dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
 					</div>
+				}
+			}
+			<section class="flex flex-col gap-2 p-2 my-2 border border-solid border-primary rounded">
+				<header class="flex flex-col gap-2">
 					<div class="flex items-baseline gap-2 justify-center">
 						<h1 class="text-4xl font-bold uppercase font-brand md:text-6xl text-primary">todo</h1>
 					</div>
 					<h2 class="text-center text-sm my-2">
-						The input is bound to a local store, but this is not a single page application.  It is like having <a class="link-primary" href="https://htmx.org" target="_blank">HTMX</a> + <a class="link-primary" href="https://alpinejs.dev/" target="_blank">Alpine.js</a> but with just one API to learn and much easier to extend.
+						The input is bound to a local store, but this is not a single page application.  It is like having <a class="link" href="https://htmx.org" target="_blank">HTMX</a> + <a class="link" href="https://alpinejs.dev/" target="_blank">Alpine.js</a> but with just one API to learn and much easier to extend.
 					</h2>
 					<div class="flex items-center gap-2">
 						if hasTodos {
 							<div class="tooltip" data-tip="toggle all todos">
-								<button
-									id="toggleAll"
-									class="btn btn-lg"
-									data-on:click={ datastar.PostSSE("/api/todos/-1/toggle") }
-									data-indicator="toggleAllFetching"
-									data-attrs-disabled="$toggleAllFetching"
-								>
-									@common.Icon("material-symbols:checklist")
-								</button>
+								@tooltip.Tooltip() {
+									@tooltip.Trigger() {
+										@button.Button(button.Props{
+											ID:   "toggleAll",
+											Size: button.SizeLg,
+											Attributes: templ.Attributes{
+												"data-on:click":       datastar.PostSSE("/api/todos/-1/toggle"),
+												"data-indicator":      "toggleAllFetching",
+												"data-attrs-disabled": "$toggleAllFetching",
+											},
+										}) {
+											@icon.ListChecks()
+										}
+									}
+									@tooltip.Content(tooltip.ContentProps{}) {
+										Toggle All Todos
+									}
+								}
 							</div>
 						}
 						if mvc.EditingIdx <0 {
@@ -107,38 +121,61 @@ templ TodosMVCView(mvc *TodoMVC) {
 								}
 							</strong> left
 						</span>
-						<div class="join">
+						<div class="flex gap-2">
 							for i := TodoViewModeAll; i < TodoViewModeLast; i++ {
 								if i == mvc.Mode {
-									<div class="btn btn-xs btn-primary join-item">{ TodoViewModeStrings[i] }</div>
-								} else {
-									<button
-										class="btn btn-xs join-item"
-										data-on:click={ datastar.PutSSE("/api/todos/mode/%d", i) }
-									>
+									@button.Button() {
 										{ TodoViewModeStrings[i] }
-									</button>
+									}
+								} else {
+									@button.Button(button.Props{
+										Variant: button.VariantSecondary,
+										Attributes: templ.Attributes{
+											"data-on:click": datastar.PutSSE("/api/todos/mode/%d", i),
+										},
+									}) {
+										{ TodoViewModeStrings[i] }
+									}
 								}
 							}
 						</div>
-						<div class="join">
+						<div class="flex gap-2">
 							if completed > 0 {
 								<div class="tooltip" data-tip={ fmt.Sprintf("clear %d completed todos", completed) }>
-									<button
-										class="btn btn-error btn-xs join-item"
-										data-on:click={ datastar.DeleteSSE("/api/todos/-1") }
-									>
-										@common.Icon("material-symbols:delete")
-									</button>
+									@tooltip.Tooltip() {
+										@tooltip.Trigger() {
+											@button.Button(button.Props{
+												Variant: button.VariantDestructive,
+												Attributes: templ.Attributes{
+													"data-on:click": datastar.DeleteSSE("/api/todos/-1"),
+												},
+											}) {
+												@icon.Trash2()
+											}
+										}
+										@tooltip.Content(tooltip.ContentProps{}) {
+											Clear { completed } Completed Todos
+										}
+									}
 								</div>
 							}
 							<div class="tooltip" data-tip="Reset list">
-								<button
-									class="btn btn-warning btn-xs join-item"
-									data-on:click={ datastar.PutSSE("/api/todos/reset") }
-								>
-									@common.Icon("material-symbols:delete-sweep")
-								</button>
+								@tooltip.Tooltip() {
+									@tooltip.Trigger() {
+										@button.Button(button.Props{
+											Variant: button.VariantOutline,
+											Attributes: templ.Attributes{
+
+												"data-on:click": datastar.PutSSE("/api/todos/reset"),
+											},
+										}) {
+											@icon.RotateCcw()
+										}
+									}
+									@tooltip.Content(tooltip.ContentProps{}) {
+										Reset List
+									}
+								}
 							</div>
 						</div>
 					</footer>
@@ -152,21 +189,27 @@ templ TodosMVCView(mvc *TodoMVC) {
 }
 
 templ TodoInput(i int) {
-	<input
-		id="todoInput"
-		data-testid="todos_input"
-		class="flex-1 w-full italic input input-bordered input-lg"
-		placeholder="What needs to be done?"
-		data-bind:input
-		data-on:keydown={ fmt.Sprintf(`
+	{{
+		attrs := templ.Attributes{
+			"data-testid": "todos_input",
+			"data-bind":   "input",
+			"data-on:keydown": fmt.Sprintf(`
 			if (evt.key !== 'Enter' || !$input.trim().length) return;
 			%s;
 			$input = '';
-		`, datastar.PutSSE("/api/todos/%d/edit",i) ) }
-		if i >= 0 {
-			data-on:click__outside={ datastar.PutSSE("/api/todos/cancel") }
+		`, datastar.PutSSE("/api/todos/%d/edit", i)),
 		}
-	/>
+
+		if i > 0 {
+			attrs["data-on:click__outside"] = datastar.PutSSE("/api/todos/cancel")
+		}
+	}}
+	@input.Input(input.Props{
+		ID:          "todoInput",
+		Class:       "italic border-primary h-10",
+		Placeholder: "What needs to be done?",
+		Attributes:  attrs,
+	})
 }
 
 templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
@@ -188,9 +231,9 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				data-indicator={ fetchingSignalName }
 			>
 				if todo.Completed {
-					@common.Icon("material-symbols:check-box-outline")
+					@icon.SquareCheckBig()
 				} else {
-					@common.Icon("material-symbols:check-box-outline-blank")
+					@icon.Square()
 				}
 			</label>
 			<label
@@ -202,16 +245,20 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				{ todo.Text }
 			</label>
 			@common.SseIndicator(fetchingSignalName)
-			<button
-				id={ fmt.Sprintf("delete%d", i) }
-				class="invisible btn btn-error group-hover:visible"
-				data-on:click={ datastar.DeleteSSE("/api/todos/%d", i) }
-				data-testid={ fmt.Sprintf("delete_todo%d", i) }
-				data-indicator={ fetchingSignalName }
-				data-attrs-disabled={ fetchingSignalName + "" }
-			>
-				@common.Icon("material-symbols:close")
-			</button>
+			@button.Button(button.Props{
+				ID:      fmt.Sprintf("delete%d", i),
+				Variant: button.VariantDestructive,
+				Class:   "invisible group-hover:visible",
+				Size:    button.SizeSm,
+				Attributes: templ.Attributes{
+					"data-on:click":       datastar.DeleteSSE("/api/todos/%d", i),
+					"data-testid":         fmt.Sprintf("delete_todo%d", i),
+					"data-indicator":      fetchingSignalName,
+					"data-attrs-disabled": fetchingSignalName + "",
+				},
+			}) {
+				@icon.Trash()
+			}
 		</li>
 	}
 }

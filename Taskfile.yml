@@ -16,6 +16,12 @@ tasks:
 
   build:web:styles:
     cmds:
+      - |
+        TEMPLUI_PATH="$(go list -m -f {{`'{{.Dir}}'`}} github.com/templui/templui)" && \
+        printf '%s\n' \
+          '@source "./**/*.templ";' \
+          "@source \"$TEMPLUI_PATH/components/**/*.templ\";" \
+          > ./web/resources/styles/sources.generated.css
       - go tool gotailwind -i web/resources/styles/styles.css -o $STATIC_DIR/index.css
     sources:
       - "./web/resources/**/*.{html,ts,templ,go,css}"

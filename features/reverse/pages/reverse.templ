@@ -1,6 +1,8 @@
 package pages
 
 import (
+	"github.com/templui/templui/components/input"
+	"github.com/templui/templui/components/label"
 	"northstar/features/common/components"
 	"northstar/features/common/layouts"
 	"northstar/web/resources"
@@ -13,10 +15,19 @@ templ ReversePage() {
 			class="h-screen flex justify-center items-center"
 		>
 			<div class="border border-primary rounded flex flex-col gap-2 p-8 w-80">
-				<label class="input">
-					<span class="label">Reverse</span>
-					<input type="text" data-bind:_name=""/>
-				</label>
+				<div class="w-full max-w-sm grid gap-2">
+					@label.Label(label.Props{
+						For: "reverse",
+					}) {
+						Reverse
+					}
+					@input.Input(input.Props{
+						ID: "reverse",
+						Attributes: templ.Attributes{
+							"data-bind": "_name",
+						},
+					})
+				</div>
 				<p class="truncate" data-signals:_reversed="" data-text="$_reversed"></p>
 				<reverse-component data-on:reverse="$_reversed = evt.detail.value" data-attr:name="$_name"></reverse-component>
 			</div>
