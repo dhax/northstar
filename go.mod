@@ -22,7 +22,7 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/shirou/gopsutil/v4 v4.26.2
 	github.com/starfederation/datastar-go v1.1.0
-	github.com/templui/templui v1.9.1
+	github.com/templui/templui v1.9.2
 )
 
 require (
